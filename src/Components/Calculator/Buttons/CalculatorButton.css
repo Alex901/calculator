@@ -1,0 +1,44 @@
+
+.CalculatorButton {
+    margin: 3px;
+    background-color: rgb(131, 124, 138);
+    color: rgb(255, 255, 255);
+}
+
+.CalculatorButton:hover {
+    background-color: rgb(216, 162, 96);
+    border: 2px, solid;
+    color: rgb(66, 62, 62);
+}
+
+.CalculatorButton:hover:disabled {
+    background-color: rgb(162, 162, 160);
+    border: 2px, solid;
+    color: rgb(255, 255, 255);
+}
+
+.executeButton {
+    background-color: rgb(84, 84, 194);
+}
+
+.executeButton:hover {
+    background-color: rgb(162, 162, 160);
+    border: 2px, solid;
+    color: rgb(255, 255, 255);
+}
+
+.executeButton:hover:disabled {
+    background-color: rgb(84, 84, 194);
+    border: 2px, solid;
+    color: rgb(255, 255, 255);
+}
+
+.clear {
+    background-color: rgb(238, 78, 78);
+}
+
+.erase {
+    background-color: rgb(238, 153, 153);
+}
+
+

@@ -1,10 +1,12 @@
 .content-card {
-  background-color: #fff;
+  background-color: #f7f7f7;
   padding: 20px;
+  border: 1px;
+  border-color: black;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Small shadow */
+  box-shadow: 0px 0px 20px 14px rgba(0, 0, 0, 0.1);
   position: relative; /* Position relative for absolute centering */
-
   left: 50%; /* Center horizontally */
   transform: translateX(-50%); /* Center horizontally */
+  margin-top: -140px;
 }
