@@ -34,7 +34,7 @@ const Calculator = () => {
             setCurrentNumber(1 / currentNumber);
             setExpression("1/" + currentNumber);
         } else if (value === '=') {
-            evaluateExpression();
+            evaluateExpression(value);
         } else if (value === 'C') {
             resetAll();
         } else if (value === 'CE') {
@@ -54,10 +54,19 @@ const Calculator = () => {
                 }
                 //setExpression(currentExpression + value);
             } else { //IsOperation
-                
-                setExpression(currentNumber + value);
-                setCurrentNumber(0);
-                setExecDisabled(false);
+                //eveluate
+                //update expression
+                //change operation
+                console.log(currentExpression.charAt(currentExpression.length));
+                if (currentExpression.length >1 && currentNumber == 0) { //TODO: Smarter helper method here 
+                    console.log("haj")
+                    setExpression(currentExpression.slice(0, -1)+value);
+                    return;
+                } else {
+                    setExpression(currentNumber + value);
+                    setCurrentNumber(0);
+                    setExecDisabled(false);
+                }
             }
             // 1. Empty display -> rerender"
             // 2. A number -> Update number"
@@ -90,14 +99,15 @@ const Calculator = () => {
         });
     }
 
-    const evaluateExpression = () => {
+    const evaluateExpression = (value) => {
         try {
             /*        setExpression(currentExpression+currentNumber)
                    console.log(currentExpression+currentNumber);
                    console.log(currentNumber); */
             const result = eval(currentExpression + currentNumber);
             setCurrentNumber(result);
-            setExecDisabled(true);
+            setExpression(currentExpression + currentNumber + value);
+          //  setExecDisabled(true);
             setZeroDisabled(true);
         } catch (error) {
             console.error("Error in evaluating expression");
