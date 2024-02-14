@@ -22,7 +22,7 @@ const Calculator = () => {
 
         if (value === "±") {
             setCurrentNumber(currentNumber * -1);
-        } else if (value === "." && !currentNumber.includes(".")) {
+        } else if (value === "." && !currentNumber.includes('.')) {
             setCurrentNumber(currentNumber + value);
         } else if (value === "√(x)") {
             setCurrentNumber(Math.sqrt(currentNumber));
@@ -60,7 +60,7 @@ const Calculator = () => {
                 console.log(currentExpression.charAt(currentExpression.length));
                 if (currentExpression.length >1 && currentNumber == 0) { //TODO: Smarter helper method here 
                     console.log("haj")
-                    setExpression(currentExpression.slice(0, -1)+value);
+                    setExpression(currentExpression.slice(0,-1)+value);
                     return;
                 } else {
                     setExpression(currentNumber + value);
