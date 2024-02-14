@@ -21,11 +21,6 @@
     background-color: rgb(84, 84, 194);
 }
 
-.executeButton:hover {
-    background-color: rgb(162, 162, 160);
-    border: 2px, solid;
-    color: rgb(255, 255, 255);
-}
 
 .executeButton:hover:disabled {
     background-color: rgb(84, 84, 194);

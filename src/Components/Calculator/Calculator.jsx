@@ -7,14 +7,14 @@ import CalculatorButton from "./Buttons/CalculatorButton";
 const Calculator = () => {
     const [currentNumber, setCurrentNumber] = useState("0"); //Number to be displayed
     const [currentExpression, setExpression] = useState(''); //setCurrentExpression, but CBA :)
-    const [isExecDisabled, setExecDisabled] = useState(false);
+    const [isExecDisabled, setExecDisabled] = useState(true);
     const [isBackDisabled, setBackDisabled] = useState(true);
     const [isOpDisabled, setOpDisabled] = useState(true);
-    const [isFuncDisabled, setFuncDisabled] = useState(true);
+    const [isFuncDisabled, setFuncDisabled] = useState(false);
     const [isZeroDisabled, setZeroDisabled] = useState(true);
     const [numberReset, setNumberReset] = useState(false);
-    const [ans, setAns] = useState(0); 
-    const [tmp, setTmp] = useState(0); 
+    const [ans, setAns] = useState(0);
+    const [tmp, setTmp] = useState(0);
 
     const HandleButtonClick = (value) => {
         //TOOD: NaN 
@@ -24,9 +24,9 @@ const Calculator = () => {
         //First we check special functions, so first we check if we have a zero
 
         if (value === "±") {
-            setCurrentNumber(currentNumber * -1+'');
+            setCurrentNumber(currentNumber * -1 + '');
         } else if (value === ".") {
-            if ( currentNumber.includes('.')) {
+            if (currentNumber.includes('.')) {
                 return; //Do nothing
             } else {
                 setCurrentNumber(currentNumber + value);
@@ -61,20 +61,22 @@ const Calculator = () => {
                 if (currentNumber == "0") { //Avoid leding zero, 01 etc
                     setCurrentNumber(value);
                     setZeroDisabled(false); //Uggly fix, but it works
-                } else if(numberReset){
+                } else if (numberReset) {
                     setCurrentNumber(value)
                     setNumberReset(false)
                 } else {
                     setCurrentNumber(currentNumber + '' + value);
-                    //setExpression(currentExpression + value);
                 }
-                //setExpression(currentExpression + value);
-            } else {
+            } else { //IsOperation
                 if (isValidNumber(currentNumber)) {
                     console.log("valid number, continue")
                     if (currentExpression == '') {
                         setExpression(currentNumber + value);
                         setCurrentNumber("0");
+                    } else if (currentExpression.includes("=")) {
+                        setExpression(currentExpression.slice(0, -1));
+                        console.log(currentExpression);
+                        updateExpression(value);
                     } else {
                         if (currentNumber != "0") {
                             updateExpression(value);
@@ -85,41 +87,22 @@ const Calculator = () => {
                 } else {
                     console.log("invalid number, stop")
                 }
-                //1) Check for valid number (!= 0)
-                //2) Is there an expression
-                //-> yes; update expression
-                //-> no; set
-                /*  console.log('last char: ', getLastCharacter(currentNumber));
-                 if(currentNumber != 0){
-                 console.log(currentExpression.charAt(currentExpression.length));
-                 if(getLastCharacter(currentNumber) == "."){ 
-                     return;
-                 }else if (currentExpression.length >1 && currentNumber == 0 ) { //TODO: Smarter helper method here 
-                     console.log("haj")
-                     setExpression(currentExpression.slice(0,-1)+value);
-                     return;
-                 } else {
-                     setExpression(currentNumber + value);
-                     setCurrentNumber(0);
-                     setExecDisabled(false);
-                 }
-             } */
+                setExecDisabled(false);
             }
-            // 1. Empty display -> rerender"
-            // 2. A number -> Update number"
-            // 3. Arithmetic -> Update expression
         }
         console.log('Button clicked', value);  // Check so things makes sense
     };
 
     const resetNumber = () => {
         setCurrentNumber('0');
+        setNumberReset(false);
     }
 
     const resetAll = () => {
         setCurrentNumber('0');
         setExpression('');
         setAns('');
+        setNumberReset(false);
     }
 
     //Function to remove one character at the time,
@@ -130,7 +113,7 @@ const Calculator = () => {
             const newNumber = prevNumber.slice(0, -1);
             if (newNumber === "") {
                 // setBackDisabled(true);
-               // setOpDisabled(true);
+                // setOpDisabled(true);
                 return "0";
             } else {
                 return newNumber.toString();
@@ -149,7 +132,7 @@ const Calculator = () => {
             setExpression(currentExpression + currentNumber + value);
             setNumberReset(true);
             //  setExecDisabled(true);
-           // setZeroDisabled(true);
+            // setZeroDisabled(true);
         } catch (error) {
             console.error("Error in evaluating expression");
             setExpression('');
@@ -161,7 +144,7 @@ const Calculator = () => {
         try {
             setTmp(currentNumber);
             const result = eval(currentExpression + '' + currentNumber);
-            setCurrentNumber(result+'');
+            setCurrentNumber(result + '');
             setAns(result);
             setExpression(result + value);
             setNumberReset(true);
@@ -176,7 +159,7 @@ const Calculator = () => {
 
 
     const isValidNumber = str => {
-        if(typeof str !== 'string'){
+        if (typeof str !== 'string') {
             str = str.toString();
         }
 
