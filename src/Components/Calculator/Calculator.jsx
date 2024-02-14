@@ -24,7 +24,7 @@ const Calculator = () => {
         if (value === "±") {
             setCurrentNumber(currentNumber * -1);
         } else if (value === ".") {
-            if (currentNumber.includes('.')) {
+            if ( currentNumber.includes('.')) {
                 return; //Do nothing
             } else {
                 setCurrentNumber(currentNumber + value);
@@ -60,7 +60,7 @@ const Calculator = () => {
                     setCurrentNumber(value);
                     setZeroDisabled(false); //Uggly fix, but it works
                 } else {
-                    setCurrentNumber(currentNumber + value);
+                    setCurrentNumber(currentNumber + '' + value);
                     //setExpression(currentExpression + value);
                 }
                 //setExpression(currentExpression + value);
@@ -121,11 +121,12 @@ const Calculator = () => {
     //untill the input is empty
     const removeOneCharacter = () => {
         setCurrentNumber(prevNumber => {
+            prevNumber = prevNumber.toString();
             const newNumber = prevNumber.slice(0, -1);
             if (newNumber === "") {
-                setBackDisabled(true);
-                setOpDisabled(true);
-                return 0;
+                // setBackDisabled(true);
+               // setOpDisabled(true);
+                return "0";
             } else {
                 return newNumber.toString();
             }
@@ -152,8 +153,8 @@ const Calculator = () => {
 
     const updateExpression = (value) => {
         try {
-            const result = eval(currentExpression + currentNumber);
-            setCurrentNumber(result);
+            const result = eval(currentExpression + '' + currentNumber);
+            setCurrentNumber(result.toString);
             setAns(result);
             setExpression(result + value);
             //  setExecDisabled(true);
@@ -168,7 +169,7 @@ const Calculator = () => {
 
     const isValidNumber = str => {
         if(typeof str !== 'string'){
-            return false;
+            str = str.toString();
         }
 
         if (str.charAt(str.length - 1) == ".") {
