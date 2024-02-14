@@ -8,7 +8,7 @@ const Calculator = () => {
     const [currentNumber, setCurrentNumber] = useState("0"); //Number to be displayed
     const [currentExpression, setExpression] = useState(''); //setCurrentExpression, but CBA :)
     const [isExecDisabled, setExecDisabled] = useState(true);
-    const [isBackDisabled, setBackDisabled] = useState(true);
+    const [isBackDisabled, setBackDisabled] = useState(false);
     const [isOpDisabled, setOpDisabled] = useState(true);
     const [isFuncDisabled, setFuncDisabled] = useState(true);
     const [isZeroDisabled, setZeroDisabled] = useState(true);
@@ -187,6 +187,28 @@ const Calculator = () => {
                 // setExecDisabled(true);
             }       
     }
+
+    const updateExpressionMultiEqual = (value) => {
+        try {
+            setExpression(prevExpression => {
+                const expressionWithoutEqual = prevExpression.slice(0, -1);
+                console.log("currentExp:", currentExpression);
+                console.log("prevExp; ", prevExpression)
+                console.log("EE; ", expressionWithoutEqual)
+
+                const result = eval(expressionWithoutEqual);
+                console.log("result: ", result)
+                setAns(result + '');
+                setExpression(result + value);
+                setNumberReset(true);
+            });
+            //  setExecDisabled(true);
+            // setZeroDisabled(true);
+        } catch (error) {
+            console.error("Error in evaluating expression");
+            // setExecDisabled(true);
+        }       
+}
 
     const isValidNumber = str => {
         if (typeof str !== 'string') {
