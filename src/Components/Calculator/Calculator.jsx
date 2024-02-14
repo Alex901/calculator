@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Calculator.css';
 import Display from "./Display/Display";
 import CalculatorButton from "./Buttons/CalculatorButton";
@@ -70,14 +70,12 @@ const Calculator = () => {
                 }
             } else { //IsOperation
                 if (isValidNumber(currentNumber)) {
-                    console.log("valid number, continue")
+            //        console.log("valid number, continue")
                     if (currentExpression == '') {
                         setExpression(currentNumber + value);
                         setCurrentNumber("0");
                     } else if (currentExpression.includes("=")) {
-                        setExpression(currentExpression.slice(0, -1));
-                        console.log(currentExpression);
-                        updateExpression(value);
+                        updateExpressionEq(value);
                     } else {
                         if (currentNumber != "0") { // Dont need this(probably :))
                             updateExpression(value);
@@ -91,7 +89,7 @@ const Calculator = () => {
                 setExecDisabled(false);
             }
         }
-        console.log('Button clicked', value);  // Check so things makes sense
+       // console.log('Button clicked', value);  // Check so things makes sense
     };
 
     const resetNumber = () => {
@@ -142,23 +140,54 @@ const Calculator = () => {
     }
 
     const updateExpression = (value) => {
-        try {
-            setTmp(currentNumber);
-            const result = eval(currentExpression + '' + currentNumber);
-            setCurrentNumber(result + '');
-            setAns(result);
-            setExpression(result + value);
-            setNumberReset(true);
-            setOpDisabled(true);
-            //  setExecDisabled(true);
-            // setZeroDisabled(true);
-        } catch (error) {
-            console.error("Error in evaluating expression");
-            setExpression('');
-            // setExecDisabled(true);
-        }
+
+            try {
+                setExpression(prevExpression => {
+                    console.log("prevExp:", prevExpression);
+                    console.log("currentNumber ", currentNumber)
+                    setTmp(currentNumber); //Why did I even do this ? 
+                    const result = eval(prevExpression + '' + currentNumber);
+                    setCurrentNumber(result + '');
+                    setAns(result + '');
+                    setExpression(result + value);
+                    setNumberReset(true);
+                    setOpDisabled(true);
+
+                })
+                //  setExecDisabled(true);
+                // setZeroDisabled(true);
+            } catch (error) {
+                console.error("Error in evaluating expression");
+                // setExecDisabled(true);
+            }
     }
 
+    
+    const updateExpressionEq = (value) => {
+            console.log("1) CurrentExpression", currentExpression);
+
+            try {
+                setExpression(prevExpression => {
+                    const expressionWithoutEqual = prevExpression.slice(0, -1);
+                    console.log("currentExp:", currentExpression);
+                    console.log("prevExp; ", prevExpression)
+                    console.log("EE; ", expressionWithoutEqual)
+
+                    const result = eval(expressionWithoutEqual);
+                    console.log("result: ", result)
+                    setAns(result + '');
+                    setExpression(result + value);
+                    setNumberReset(true);
+                    setOpDisabled(true);
+
+                });
+                //  setExecDisabled(true);
+                // setZeroDisabled(true);
+            } catch (error) {
+                console.error("Error in evaluating expression");
+                // setExecDisabled(true);
+            }       
+    }
 
     const isValidNumber = str => {
         if (typeof str !== 'string') {
