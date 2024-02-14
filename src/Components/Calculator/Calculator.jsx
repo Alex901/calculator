@@ -44,6 +44,9 @@ const Calculator = () => {
             setCurrentNumber(1 / currentNumber);
             setExpression("1/" + currentNumber);
         } else if (value === '=') {
+            if(currentExpression.includes("=")){
+                updateExpressionEq(value);
+            } else 
             evaluateExpression(value);
         } else if (value === 'C') {
             resetAll();
@@ -164,8 +167,6 @@ const Calculator = () => {
 
     
     const updateExpressionEq = (value) => {
-            console.log("1) CurrentExpression", currentExpression);
-
             try {
                 setExpression(prevExpression => {
                     const expressionWithoutEqual = prevExpression.slice(0, -1);
@@ -178,8 +179,6 @@ const Calculator = () => {
                     setAns(result + '');
                     setExpression(result + value);
                     setNumberReset(true);
-                    setOpDisabled(true);
-
                 });
                 //  setExecDisabled(true);
                 // setZeroDisabled(true);
