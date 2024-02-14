@@ -10,7 +10,7 @@ const Calculator = () => {
     const [isExecDisabled, setExecDisabled] = useState(true);
     const [isBackDisabled, setBackDisabled] = useState(true);
     const [isOpDisabled, setOpDisabled] = useState(true);
-    const [isFuncDisabled, setFuncDisabled] = useState(false);
+    const [isFuncDisabled, setFuncDisabled] = useState(true);
     const [isZeroDisabled, setZeroDisabled] = useState(true);
     const [numberReset, setNumberReset] = useState(false);
     const [ans, setAns] = useState(0);
@@ -58,6 +58,7 @@ const Calculator = () => {
             if (!isNaN(value)) { //isValue
                 setBackDisabled(false);
                 setOpDisabled(false);
+                setFuncDisabled(false);
                 if (currentNumber == "0") { //Avoid leding zero, 01 etc
                     setCurrentNumber(value);
                     setZeroDisabled(false); //Uggly fix, but it works
@@ -78,7 +79,7 @@ const Calculator = () => {
                         console.log(currentExpression);
                         updateExpression(value);
                     } else {
-                        if (currentNumber != "0") {
+                        if (currentNumber != "0") { // Dont need this(probably :))
                             updateExpression(value);
                         } else {
                             setExpression(currentExpression.slice(0, -1) + value); //Change op
@@ -148,6 +149,7 @@ const Calculator = () => {
             setAns(result);
             setExpression(result + value);
             setNumberReset(true);
+            setOpDisabled(true);
             //  setExecDisabled(true);
             // setZeroDisabled(true);
         } catch (error) {
@@ -192,7 +194,7 @@ const Calculator = () => {
                 <CalculatorButton value="1" onClick={HandleButtonClick} />
                 <CalculatorButton value="2" onClick={HandleButtonClick} />
                 <CalculatorButton value="3" onClick={HandleButtonClick} />
-                <CalculatorButton value="/" onClick={HandleButtonClick} customClass={"Op"} />
+                <CalculatorButton value="/" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
                 <CalculatorButton value="4" onClick={HandleButtonClick} />
                 <CalculatorButton value="5" onClick={HandleButtonClick} />
                 <CalculatorButton value="6" onClick={HandleButtonClick} />
