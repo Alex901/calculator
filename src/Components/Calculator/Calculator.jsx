@@ -12,7 +12,9 @@ const Calculator = () => {
     const [isOpDisabled, setOpDisabled] = useState(true);
     const [isFuncDisabled, setFuncDisabled] = useState(true);
     const [isZeroDisabled, setZeroDisabled] = useState(true);
-    const [ans, setAns] = useState(0); //For later
+    const [numberReset, setNumberReset] = useState(false);
+    const [ans, setAns] = useState(0); 
+    const [tmp, setTmp] = useState(0); 
 
     const HandleButtonClick = (value) => {
         //TOOD: NaN 
@@ -22,7 +24,7 @@ const Calculator = () => {
         //First we check special functions, so first we check if we have a zero
 
         if (value === "±") {
-            setCurrentNumber(currentNumber * -1);
+            setCurrentNumber(currentNumber * -1+'');
         } else if (value === ".") {
             if ( currentNumber.includes('.')) {
                 return; //Do nothing
@@ -59,6 +61,9 @@ const Calculator = () => {
                 if (currentNumber == "0") { //Avoid leding zero, 01 etc
                     setCurrentNumber(value);
                     setZeroDisabled(false); //Uggly fix, but it works
+                } else if(numberReset){
+                    setCurrentNumber(value)
+                    setNumberReset(false)
                 } else {
                     setCurrentNumber(currentNumber + '' + value);
                     //setExpression(currentExpression + value);
@@ -121,7 +126,7 @@ const Calculator = () => {
     //untill the input is empty
     const removeOneCharacter = () => {
         setCurrentNumber(prevNumber => {
-            prevNumber = prevNumber.toString();
+            prevNumber = prevNumber.toString(); //TODO: remember to remove
             const newNumber = prevNumber.slice(0, -1);
             if (newNumber === "") {
                 // setBackDisabled(true);
@@ -142,6 +147,7 @@ const Calculator = () => {
             setCurrentNumber(result);
             setAns(result);
             setExpression(currentExpression + currentNumber + value);
+            setNumberReset(true);
             //  setExecDisabled(true);
            // setZeroDisabled(true);
         } catch (error) {
@@ -153,10 +159,12 @@ const Calculator = () => {
 
     const updateExpression = (value) => {
         try {
+            setTmp(currentNumber);
             const result = eval(currentExpression + '' + currentNumber);
-            setCurrentNumber(result.toString);
+            setCurrentNumber(result+'');
             setAns(result);
             setExpression(result + value);
+            setNumberReset(true);
             //  setExecDisabled(true);
             // setZeroDisabled(true);
         } catch (error) {
