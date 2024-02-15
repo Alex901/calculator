@@ -17,12 +17,7 @@ const Calculator = () => {
     const [tmp, setTmp] = useState(0);
 
     const HandleButtonClick = (value) => {
-        //TOOD: NaN 
-
-        //TODO: Should d a switch-case to make it less messy. Maybe later
-
-        //First we check special functions, so first we check if we have a zero
-
+        console.log("value", value);
         if (value === "±") {
             setCurrentNumber(currentNumber * -1 + '');
         } else if (value === ".") {
@@ -59,6 +54,9 @@ const Calculator = () => {
 
         } else {
             if (!isNaN(value)) { //isValue
+                if(currentExpression.includes("=")){
+                    setExpression('');
+                }
                 setBackDisabled(false);
                 setOpDisabled(false);
                 setFuncDisabled(false);
@@ -123,22 +121,21 @@ const Calculator = () => {
         });
     }
 
+
+    //TODO, bake all these functions into one. This is uggly AF 
     const evaluateExpression = (value) => {
         try {
-            /*        setExpression(currentExpression+currentNumber)
-                   console.log(currentExpression+currentNumber);
-                   console.log(currentNumber); */
             const result = eval(currentExpression + currentNumber);
             setCurrentNumber(result);
             setAns(result);
             setExpression(currentExpression + currentNumber + value);
             setNumberReset(true);
+            setOpDisabled(true);
             //  setExecDisabled(true);
             // setZeroDisabled(true);
         } catch (error) {
             console.error("Error in evaluating expression");
             setExpression('');
-            // setExecDisabled(true);
         }
     }
 
@@ -170,14 +167,28 @@ const Calculator = () => {
             try {
                 setExpression(prevExpression => {
                     const expressionWithoutEqual = prevExpression.slice(0, -1);
-                    console.log("currentExp:", currentExpression);
-                    console.log("prevExp; ", prevExpression)
                     console.log("EE; ", expressionWithoutEqual)
-
-                    const result = eval(expressionWithoutEqual);
+                    let operator = '';
+                    
+                    for(let i = 0; i < expressionWithoutEqual.length; i++){
+                        if(isNaN(expressionWithoutEqual[i])) {
+                            operator = expressionWithoutEqual[i];
+                            console.log("operator is ", operator);
+                            break;
+                        }
+                    }
+                    //Expression needs to be updated first 
+                    const variables = expressionWithoutEqual.split(operator);
+                    console.log("Variables1: ", variables);
+                    console.log("EE; ", expressionWithoutEqual)
+                    variables[0] = eval(variables[0] + '' + operator + '' + variables[1]) 
+                    setExpression(variables[0] + '' + operator + '' + variables[1] + '=');
+                    console.log("Variables2: ", variables);
+                    const result = eval(variables[0] + '' + operator + '' + variables[1]);
                     console.log("result: ", result)
                     setAns(result + '');
-                    setExpression(result + value);
+                    setCurrentNumber(result);
+                    setOpDisabled(true);
                     setNumberReset(true);
                 });
                 //  setExecDisabled(true);
