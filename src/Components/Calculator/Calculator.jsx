@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './Calculator.css';
 import Display from "./Display/Display";
 import CalculatorButton from "./Buttons/CalculatorButton";
+import History from "./History/History";
 
 
 const Calculator = () => {
@@ -15,6 +16,7 @@ const Calculator = () => {
     const [numberReset, setNumberReset] = useState(false);
     const [ans, setAns] = useState(0);
     const [tmp, setTmp] = useState(0);
+    const [history, setHistory] = useState([]); //Setresult in eval method(s xD)
 
     const HandleButtonClick = (value) => {
         console.log("value", value);
@@ -29,6 +31,7 @@ const Calculator = () => {
 
         } else if (value === "ANS") {
             setCurrentNumber(ans);
+            setHistory([...history, {currentExpression, currentNumber}]);
         } else if (value === "√(x)") {
             setCurrentNumber(Math.sqrt(currentNumber));
             setExpression("√" + currentNumber + "=");
@@ -39,10 +42,10 @@ const Calculator = () => {
             setCurrentNumber(1 / currentNumber);
             setExpression("1/" + currentNumber);
         } else if (value === '=') {
-            if(currentExpression.includes("=")){
+            if (currentExpression.includes("=")) {
                 updateExpressionEq(value);
-            } else 
-            evaluateExpression(value);
+            } else
+                evaluateExpression(value);
         } else if (value === 'C') {
             resetAll();
         } else if (value === 'CE') {
@@ -54,7 +57,7 @@ const Calculator = () => {
 
         } else {
             if (!isNaN(value)) { //isValue
-                if(currentExpression.includes("=")){
+                if (currentExpression.includes("=")) {
                     setExpression('');
                 }
                 setBackDisabled(false);
@@ -71,7 +74,7 @@ const Calculator = () => {
                 }
             } else { //IsOperation
                 if (isValidNumber(currentNumber)) {
-            //        console.log("valid number, continue")
+                    //        console.log("valid number, continue")
                     if (currentExpression == '') {
                         setExpression(currentNumber + value);
                         setCurrentNumber("0");
@@ -90,12 +93,15 @@ const Calculator = () => {
                 setExecDisabled(false);
             }
         }
-       // console.log('Button clicked', value);  // Check so things makes sense
+        // console.log('Button clicked', value);  // Check so things makes sense
     };
 
+    //Could be one function too
     const resetNumber = () => {
         setCurrentNumber('0');
         setNumberReset(false);
+        setFuncDisabled(true);
+        setOpDisabled(true);
     }
 
     const resetAll = () => {
@@ -103,6 +109,9 @@ const Calculator = () => {
         setExpression('');
         setAns('');
         setNumberReset(false);
+        setFuncDisabled(true);
+        setOpDisabled(true);
+        setHistory([]);
     }
 
     //Function to remove one character at the time,
@@ -141,74 +150,67 @@ const Calculator = () => {
 
     const updateExpression = (value) => {
 
-            try {
-                setExpression(prevExpression => {
-                    console.log("prevExp:", prevExpression);
-                    console.log("currentNumber ", currentNumber)
-                    setTmp(currentNumber); //Why did I even do this ? 
-                    const result = eval(prevExpression + '' + currentNumber);
-                    setCurrentNumber(result + '');
-                    setAns(result + '');
-                    setExpression(result + value);
-                    setNumberReset(true);
-                    setOpDisabled(true);
+        try {
+            setExpression(prevExpression => {
+                console.log("prevExp:", prevExpression);
+                console.log("currentNumber ", currentNumber)
+                setTmp(currentNumber); //Why did I even do this ? 
+                const result = eval(prevExpression + '' + currentNumber);
+                setCurrentNumber(result + '');
+                setAns(result + '');
+                setExpression(result + value);
+                setNumberReset(true);
+                setOpDisabled(true);
 
-                })
-                //  setExecDisabled(true);
-                // setZeroDisabled(true);
-            } catch (error) {
-                console.error("Error in evaluating expression");
-                // setExecDisabled(true);
-            }
+            })
+            //  setExecDisabled(true);
+            // setZeroDisabled(true);
+        } catch (error) {
+            console.error("Error in evaluating expression");
+            // setExecDisabled(true);
+        }
     }
 
-    
+
     const updateExpressionEq = (value) => {
-            try {
-                setExpression(prevExpression => {
-                    const expressionWithoutEqual = prevExpression.slice(0, -1);
-                    console.log("EE; ", expressionWithoutEqual)
-                    let operator = '';
-                    
-                    for(let i = 0; i < expressionWithoutEqual.length; i++){
-                        if(isNaN(expressionWithoutEqual[i])) {
-                            operator = expressionWithoutEqual[i];
-                            console.log("operator is ", operator);
-                            break;
-                        }
+        try {
+            setExpression(prevExpression => {
+                const expressionWithoutEqual = prevExpression.slice(0, -1);
+                let operator = '';
+
+                for (let i = 0; i < expressionWithoutEqual.length; i++) {
+                    if (isNaN(expressionWithoutEqual[i])) {
+                        operator = expressionWithoutEqual[i];
+                        console.log("operator is ", operator);
+                        break;
                     }
-                    //Expression needs to be updated first 
-                    const variables = expressionWithoutEqual.split(operator);
-                    console.log("Variables1: ", variables);
-                    console.log("EE; ", expressionWithoutEqual)
-                    variables[0] = eval(variables[0] + '' + operator + '' + variables[1]) 
-                    setExpression(variables[0] + '' + operator + '' + variables[1] + '=');
-                    console.log("Variables2: ", variables);
-                    const result = eval(variables[0] + '' + operator + '' + variables[1]);
-                    console.log("result: ", result)
-                    setAns(result + '');
-                    setCurrentNumber(result);
-                    setOpDisabled(true);
-                    setNumberReset(true);
-                });
-                //  setExecDisabled(true);
-                // setZeroDisabled(true);
-            } catch (error) {
-                console.error("Error in evaluating expression");
-                // setExecDisabled(true);
-            }       
+                }
+                //Expression needs to be updated first 
+                const variables = expressionWithoutEqual.split(operator);
+                variables[0] = eval(variables[0] + '' + operator + '' + variables[1])
+                setExpression(variables[0] + '' + operator + '' + variables[1] + '=');
+
+                const result = eval(variables[0] + '' + operator + '' + variables[1]);
+
+                setAns(result + '');
+                setCurrentNumber(result);
+                setOpDisabled(true);
+                setNumberReset(true);
+            });
+            //  setExecDisabled(true);
+            // setZeroDisabled(true);
+        } catch (error) {
+            console.error("Error in evaluating expression");
+            // setExecDisabled(true);
+        }
     }
 
     const updateExpressionMultiEqual = (value) => {
         try {
             setExpression(prevExpression => {
                 const expressionWithoutEqual = prevExpression.slice(0, -1);
-                console.log("currentExp:", currentExpression);
-                console.log("prevExp; ", prevExpression)
-                console.log("EE; ", expressionWithoutEqual)
-
                 const result = eval(expressionWithoutEqual);
-                console.log("result: ", result)
+
                 setAns(result + '');
                 setExpression(result + value);
                 setNumberReset(true);
@@ -218,8 +220,8 @@ const Calculator = () => {
         } catch (error) {
             console.error("Error in evaluating expression");
             // setExecDisabled(true);
-        }       
-}
+        }
+    }
 
     const isValidNumber = str => {
         if (typeof str !== 'string') {
@@ -239,19 +241,21 @@ const Calculator = () => {
 
 
     return (
+        <div className="applet-layout">
         <div className="calculator-layout">
             <Display expression={currentExpression} currentNumber={currentNumber} />
             <div className="button-grid">
+                <CalculatorButton value="ANS" onClick={HandleButtonClick} customClass={"ans"} />
                 <CalculatorButton value="C" onClick={HandleButtonClick} customClass={"clear"} />
-                <CalculatorButton value="CE" onClick={HandleButtonClick} customClass={"clear-all"} />
-                <CalculatorButton value="ANS" onClick={HandleButtonClick} />
+                <CalculatorButton value="CE" onClick={HandleButtonClick} customClass={"eraseNumber"} />
+
                 <CalculatorButton value="<" onClick={HandleButtonClick} customClass={"erase"} />
 
                 <CalculatorButton value="√(x)" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
                 <CalculatorButton value="x²" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
                 <CalculatorButton value="1/x" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
 
-                <CalculatorButton value="*" onClick={HandleButtonClick} disabled={isOpDisabled} />
+                <CalculatorButton value="*" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
                 <CalculatorButton value="1" onClick={HandleButtonClick} />
                 <CalculatorButton value="2" onClick={HandleButtonClick} />
                 <CalculatorButton value="3" onClick={HandleButtonClick} />
@@ -264,13 +268,16 @@ const Calculator = () => {
                 <CalculatorButton value="8" onClick={HandleButtonClick} />
                 <CalculatorButton value="9" onClick={HandleButtonClick} />
                 <CalculatorButton value="+" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
-                <CalculatorButton value="±" onClick={HandleButtonClick} />
+                <CalculatorButton value="±" onClick={HandleButtonClick} customClass={"special"} />
                 <CalculatorButton value="0" onClick={HandleButtonClick} disabled={isZeroDisabled} />
-                <CalculatorButton value="." onClick={HandleButtonClick} disabled={isOpDisabled} />
+                <CalculatorButton value="." onClick={HandleButtonClick} disabled={isOpDisabled} customClass={"special"} />
                 <CalculatorButton value="=" onClick={HandleButtonClick} disabled={isExecDisabled} customClass="executeButton" />
             </div>
+            
         </div>
-
+        
+        <History history={history} />
+        </div>
 
     );
 };

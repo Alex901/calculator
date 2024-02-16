@@ -1,7 +1,9 @@
+
 .calculator-layout {
     padding: 15px;
     border: 1px ridge rgb(220, 217, 217);
     border-radius: 20px;
+    
 }
 
 .button-grid {
@@ -9,4 +11,10 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
     background-color: rgb(239, 239, 239);
+}
+
+.applet-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 10px;
 }

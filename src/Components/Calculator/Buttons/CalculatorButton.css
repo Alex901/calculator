@@ -1,8 +1,10 @@
 
 .CalculatorButton {
-    margin: 3px;
-    background-color: rgb(131, 124, 138);
+    margin: 1px;
+    background-color: rgb(159, 153, 165);
     color: rgb(255, 255, 255);
+    border: 1px, solid;
+    border-color: rgb(129, 119, 119);
 }
 
 .CalculatorButton:hover {
@@ -18,7 +20,25 @@
 }
 
 .executeButton {
-    background-color: rgb(84, 84, 194);
+    background-color: rgb(18, 163, 64);
+}
+
+.func {
+    background-color: rgb(77, 75, 176);
+}
+
+.func:disabled {
+    background-color: rgba(168, 166, 175, 0.689);
+    color: rgb(162, 146, 146);
+}
+
+.Op:disabled {
+    background-color: rgba(168, 166, 175, 0.689);
+    color: rgb(162, 146, 146);
+}
+
+.Op {
+    background-color: rgb(133, 131, 219);
 }
 
 
@@ -28,12 +48,25 @@
     color: rgb(255, 255, 255);
 }
 
+
+
+.special{
+    background-color: rgb(134, 131, 137);
+}
+
 .clear {
-    background-color: rgb(238, 78, 78);
+    background-color: rgb(255, 59, 59);
 }
 
 .erase {
-    background-color: rgb(238, 153, 153);
+    background-color: rgb(255, 163, 163);
 }
 
+.eraseNumber {
+    background-color: rgb(254, 107, 107);
+}
+
+.ans {
+    background-color: rgb(18, 163, 64);
+}
 

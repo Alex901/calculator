@@ -7,7 +7,6 @@ import Header from './Components/Layout/Header'
 import Calculator from './Components/Calculator/Calculator'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
