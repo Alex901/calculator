@@ -19,7 +19,6 @@ const Calculator = () => {
     const [history, setHistory] = useState([]); //Setresult in eval method(s xD)
 
     const HandleButtonClick = (value) => {
-        console.log("value", value);
         if (value === "±") {
             setCurrentNumber(currentNumber * -1 + '');
         } else if (value === ".") {
@@ -31,7 +30,7 @@ const Calculator = () => {
 
         } else if (value === "ANS") {
             setCurrentNumber(ans);
-            setHistory([...history, {{currentExpression}, {currentNumber}}]);
+            setHistory([...history, { currentExpression, currentNumber }]);
         } else if (value === "√(x)") {
             setCurrentNumber(Math.sqrt(currentNumber));
             setExpression("√" + currentNumber + "=");
@@ -152,8 +151,6 @@ const Calculator = () => {
 
         try {
             setExpression(prevExpression => {
-                console.log("prevExp:", prevExpression);
-                console.log("currentNumber ", currentNumber)
                 setTmp(currentNumber); //Why did I even do this ? 
                 const result = eval(prevExpression + '' + currentNumber);
                 setCurrentNumber(result + '');
@@ -181,7 +178,7 @@ const Calculator = () => {
                 for (let i = 0; i < expressionWithoutEqual.length; i++) {
                     if (isNaN(expressionWithoutEqual[i])) {
                         operator = expressionWithoutEqual[i];
-                        console.log("operator is ", operator);
+                        // console.log("operator is ", operator);
                         break;
                     }
                 }
@@ -239,44 +236,52 @@ const Calculator = () => {
         return str.charAt(str.length - 1);
     };
 
+    const handleDelete = (index) => {
+
+        if (index !== '') {
+            const updatedHistory = [...history.slice(0, index), ...history.slice(index + 1)];
+            setHistory(updatedHistory);
+            console.log("history", updatedHistory);
+        }
+    }
 
     return (
         <div className="applet-layout">
-        <div className="calculator-layout">
-            <Display expression={currentExpression} currentNumber={currentNumber} />
-            <div className="button-grid">
-                <CalculatorButton value="ANS" onClick={HandleButtonClick} customClass={"ans"} />
-                <CalculatorButton value="C" onClick={HandleButtonClick} customClass={"clear"} />
-                <CalculatorButton value="CE" onClick={HandleButtonClick} customClass={"eraseNumber"} />
+            <div className="calculator-layout">
+                <Display expression={currentExpression} currentNumber={currentNumber} />
+                <div className="button-grid">
+                    <CalculatorButton value="ANS" onClick={HandleButtonClick} customClass={"ans"} />
+                    <CalculatorButton value="C" onClick={HandleButtonClick} customClass={"clear"} />
+                    <CalculatorButton value="CE" onClick={HandleButtonClick} customClass={"eraseNumber"} />
 
-                <CalculatorButton value="<" onClick={HandleButtonClick} customClass={"erase"} />
+                    <CalculatorButton value="<" onClick={HandleButtonClick} customClass={"erase"} />
 
-                <CalculatorButton value="√(x)" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
-                <CalculatorButton value="x²" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
-                <CalculatorButton value="1/x" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
+                    <CalculatorButton value="√(x)" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
+                    <CalculatorButton value="x²" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
+                    <CalculatorButton value="1/x" onClick={HandleButtonClick} disabled={isFuncDisabled} customClass={"func"} />
 
-                <CalculatorButton value="*" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
-                <CalculatorButton value="1" onClick={HandleButtonClick} />
-                <CalculatorButton value="2" onClick={HandleButtonClick} />
-                <CalculatorButton value="3" onClick={HandleButtonClick} />
-                <CalculatorButton value="/" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
-                <CalculatorButton value="4" onClick={HandleButtonClick} />
-                <CalculatorButton value="5" onClick={HandleButtonClick} />
-                <CalculatorButton value="6" onClick={HandleButtonClick} />
-                <CalculatorButton value="-" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
-                <CalculatorButton value="7" onClick={HandleButtonClick} />
-                <CalculatorButton value="8" onClick={HandleButtonClick} />
-                <CalculatorButton value="9" onClick={HandleButtonClick} />
-                <CalculatorButton value="+" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
-                <CalculatorButton value="±" onClick={HandleButtonClick} customClass={"special"} />
-                <CalculatorButton value="0" onClick={HandleButtonClick} disabled={isZeroDisabled} />
-                <CalculatorButton value="." onClick={HandleButtonClick} disabled={isOpDisabled} customClass={"special"} />
-                <CalculatorButton value="=" onClick={HandleButtonClick} disabled={isExecDisabled} customClass="executeButton" />
+                    <CalculatorButton value="*" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
+                    <CalculatorButton value="1" onClick={HandleButtonClick} />
+                    <CalculatorButton value="2" onClick={HandleButtonClick} />
+                    <CalculatorButton value="3" onClick={HandleButtonClick} />
+                    <CalculatorButton value="/" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
+                    <CalculatorButton value="4" onClick={HandleButtonClick} />
+                    <CalculatorButton value="5" onClick={HandleButtonClick} />
+                    <CalculatorButton value="6" onClick={HandleButtonClick} />
+                    <CalculatorButton value="-" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
+                    <CalculatorButton value="7" onClick={HandleButtonClick} />
+                    <CalculatorButton value="8" onClick={HandleButtonClick} />
+                    <CalculatorButton value="9" onClick={HandleButtonClick} />
+                    <CalculatorButton value="+" onClick={HandleButtonClick} customClass={"Op"} disabled={isOpDisabled} />
+                    <CalculatorButton value="±" onClick={HandleButtonClick} customClass={"special"} />
+                    <CalculatorButton value="0" onClick={HandleButtonClick} disabled={isZeroDisabled} />
+                    <CalculatorButton value="." onClick={HandleButtonClick} disabled={isOpDisabled} customClass={"special"} />
+                    <CalculatorButton value="=" onClick={HandleButtonClick} disabled={isExecDisabled} customClass="executeButton" />
+                </div>
+
             </div>
-            
-        </div>
-        
-        <History history={history} />
+
+            <History history={history} onDelete={handleDelete} />
         </div>
 
     );
