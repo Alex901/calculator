@@ -2,7 +2,7 @@ import React from "react";
 import './History.css';
 import HistoryEntry from "./HistoryEntry/HistoryEntry";
 
-const History = ({ history, onDelete }) => {
+const History = ({ history, onDelete, onEventClick }) => {
 
     return (
         <div className="history-layout">
@@ -12,11 +12,13 @@ const History = ({ history, onDelete }) => {
 
             <div className="history-list">
                 {history.map((entry, key) => (
+                    // eslint-disable-next-line react/jsx-key
                     <HistoryEntry
                         index={key}
                         expression={entry.currentExpression}
                         result={entry.currentNumber} 
                         onDelete={onDelete}
+                        onEventClick={onEventClick}
                         />
                 ))}
             </div>

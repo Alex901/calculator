@@ -30,7 +30,7 @@ const Calculator = () => {
 
         } else if (value === "ANS") {
             setCurrentNumber(ans);
-            setHistory([...history, { currentExpression, currentNumber }]);
+            
         } else if (value === "√(x)") {
             setCurrentNumber(Math.sqrt(currentNumber));
             setExpression("√" + currentNumber + "=");
@@ -43,8 +43,12 @@ const Calculator = () => {
         } else if (value === '=') {
             if (currentExpression.includes("=")) {
                 updateExpressionEq(value);
-            } else
+                setHistory([...history, { currentExpression, currentNumber }]);
+            } else {
                 evaluateExpression(value);
+                
+            }
+            
         } else if (value === 'C') {
             resetAll();
         } else if (value === 'CE') {
@@ -139,12 +143,16 @@ const Calculator = () => {
             setExpression(currentExpression + currentNumber + value);
             setNumberReset(true);
             setOpDisabled(true);
+            const newExpression = currentExpression + currentNumber + value;
+            console.log(newExpression);
+            // setHistory([...history, { newExpression, result }]);
             //  setExecDisabled(true);
             // setZeroDisabled(true);
         } catch (error) {
             console.error("Error in evaluating expression");
             setExpression('');
         }
+        
     }
 
     const updateExpression = (value) => {
@@ -245,6 +253,11 @@ const Calculator = () => {
         }
     }
 
+    const handleEventClick = (index) => { //Bad name, I know
+        console.log(history[index].currentExpression);
+        console.log(history[index].currentNumber);
+    }
+
     return (
         <div className="applet-layout">
             <div className="calculator-layout">
@@ -281,7 +294,7 @@ const Calculator = () => {
 
             </div>
 
-            <History history={history} onDelete={handleDelete} />
+            <History history={history} onDelete={handleDelete} onEventClick={handleEventClick} />
         </div>
 
     );
