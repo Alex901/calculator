@@ -1,14 +1,15 @@
 import React from "react";
 import './HistoryEntry.css';
 
-const HistoryEntry = ({ index, expression, result}) => {
-    console.log("index", index + " expression: ", expression + "result", result);
+const HistoryEntry = ({ expression, result}) => {
+    console.log(" expression: ", expression + "result", result);
     return (
-        <li> 
-            {index}
-            <strong>{expression}</strong>
-            {result}
-        </li>
+        <div className="history-entry">
+            <div className="history-entry-functions"> <button className="delete-button"> x </button></div>
+            <div className="expression">{expression}</div>
+            <div className="result"> <strong>{result}</strong> </div>
+            
+        </div>
     );
 };
 

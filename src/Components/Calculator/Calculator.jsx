@@ -31,7 +31,7 @@ const Calculator = () => {
 
         } else if (value === "ANS") {
             setCurrentNumber(ans);
-            setHistory([...history, {currentExpression, currentNumber}]);
+            setHistory([...history, {{currentExpression}, {currentNumber}}]);
         } else if (value === "√(x)") {
             setCurrentNumber(Math.sqrt(currentNumber));
             setExpression("√" + currentNumber + "=");
