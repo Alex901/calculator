@@ -41,13 +41,14 @@ const Calculator = () => {
             setCurrentNumber(1 / currentNumber);
             setExpression("1/" + currentNumber);
         } else if (value === '=') {
+            console.log('history in', history);
             if (currentExpression.includes("=")) {
                 updateExpressionEq(value);
                 setHistory([...history, { currentExpression, currentNumber }]);
             } else {
-                evaluateExpression(value);
-                
+                evaluateExpression(value);  
             }
+            console.log('history out', history);
             
         } else if (value === 'C') {
             resetAll();
@@ -148,6 +149,7 @@ const Calculator = () => {
             // setHistory([...history, { newExpression, result }]);
             //  setExecDisabled(true);
             // setZeroDisabled(true);
+            return [{expression: newExpression, result: result}];
         } catch (error) {
             console.error("Error in evaluating expression");
             setExpression('');
