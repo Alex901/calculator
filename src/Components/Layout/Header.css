@@ -15,6 +15,7 @@
 
   .header h1 {
     color: rgb(244, 172, 30);
+    margin: 15px;
   }
   
   .navbar {

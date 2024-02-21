@@ -17,9 +17,8 @@ const Calculator = () => {
     const [ans, setAns] = useState(0);
     const [tmp, setTmp] = useState(0);
     const [history, setHistory] = useState([]); //Setresult in eval method(s xD)
-    const displayRef = useRef(null);
+  
 
-    
     const HandleButtonClick = (value) => {
         if (value === "±") {
             setCurrentNumber(currentNumber * -1 + '');
@@ -32,7 +31,7 @@ const Calculator = () => {
 
         } else if (value === "ANS") {
             setCurrentNumber(ans);
-            
+
         } else if (value === "√(x)") {
             setCurrentNumber(Math.sqrt(currentNumber));
             setExpression("√" + currentNumber + "=");
@@ -48,10 +47,10 @@ const Calculator = () => {
                 updateExpressionEq(value);
                 setHistory([...history, { currentExpression, currentNumber }]);
             } else {
-                evaluateExpression(value);  
+                evaluateExpression(value);
             }
             console.log('history out', history);
-            
+
         } else if (value === 'C') {
             resetAll();
         } else if (value === 'CE') {
@@ -150,7 +149,7 @@ const Calculator = () => {
             console.error("Error in evaluating expression");
             setExpression('');
         }
-        
+
     }
 
     const updateExpression = (value) => {
