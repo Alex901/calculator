@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './Calculator.css';
 import Display from "./Display/Display";
 import CalculatorButton from "./Buttons/CalculatorButton";
@@ -92,7 +92,7 @@ const Calculator = () => {
                         }
                     }
                 } else {
-                    console.log("invalid number, stop")
+                    //console.log("invalid number, stop")
                 }
                 setExecDisabled(false);
             }
@@ -144,12 +144,6 @@ const Calculator = () => {
             setExpression(currentExpression + currentNumber + value);
             setNumberReset(true);
             setOpDisabled(true);
-            const newExpression = currentExpression + currentNumber + value;
-            console.log(newExpression);
-            // setHistory([...history, { newExpression, result }]);
-            //  setExecDisabled(true);
-            // setZeroDisabled(true);
-            return [{expression: newExpression, result: result}];
         } catch (error) {
             console.error("Error in evaluating expression");
             setExpression('');
