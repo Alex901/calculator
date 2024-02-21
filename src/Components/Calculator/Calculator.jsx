@@ -17,7 +17,9 @@ const Calculator = () => {
     const [ans, setAns] = useState(0);
     const [tmp, setTmp] = useState(0);
     const [history, setHistory] = useState([]); //Setresult in eval method(s xD)
+    const displayRef = useRef(null);
 
+    
     const HandleButtonClick = (value) => {
         if (value === "±") {
             setCurrentNumber(currentNumber * -1 + '');

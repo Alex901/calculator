@@ -10,7 +10,7 @@ const History = ({ history, onDelete, onEventClick }) => {
                 <p className="history-paragraph"> History</p>
             </div>
 
-            <div className="history-list">
+            <div className="history-list" style={{display: history.length > 0 ? 'grid' : 'none'}}>
                 {history.map((entry, key) => (
                     // eslint-disable-next-line react/jsx-key
                     <HistoryEntry
